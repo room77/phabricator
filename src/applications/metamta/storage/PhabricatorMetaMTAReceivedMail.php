@@ -58,9 +58,7 @@ final class PhabricatorMetaMTAReceivedMail extends PhabricatorMetaMTADAO {
   }
 
   public function getToAddresses() {
-    return array_merge(
-      $this->getRawEmailAddresses(idx($this->headers, 'to')),
-      $this->getRawEmailAddresses(idx($this->headers, 'delivered-to')));
+    return $this->getRawEmailAddresses(idx($this->headers, 'to'));
   }
 
   public function loadExcludeMailRecipientPHIDs() {
