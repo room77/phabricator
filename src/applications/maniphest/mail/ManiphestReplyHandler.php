@@ -73,6 +73,7 @@ final class ManiphestReplyHandler extends PhabricatorMailReplyHandler {
       $task->setTitle(nonempty($mail->getSubject(), 'Untitled Task'));
       $task->setDescription($body);
       $task->setPriority(ManiphestTaskPriority::getDefaultPriority());
+      $to_addresses = $mail->getDeliveredToAddresses();
 
     } else {
       $lines = explode("\n", trim($body));
@@ -155,7 +156,8 @@ final class ManiphestReplyHandler extends PhabricatorMailReplyHandler {
     $editor->setParentMessageID($mail->getMessageID());
     $editor->setExcludeMailRecipientPHIDs(
       $this->getExcludeMailRecipientPHIDs());
-    $editor->applyTransactions($task, $xactions);
+    $raw_tos = $mail->getToAddresses();
+    $editor->applyTransactions($task, $xactions, $raw_tos);
 
     $event = new PhabricatorEvent(
       PhabricatorEventType::TYPE_MANIPHEST_DIDEDITTASK,

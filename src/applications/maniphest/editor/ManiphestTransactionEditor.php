@@ -19,7 +19,7 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
     return $this;
   }
 
-  public function applyTransactions(ManiphestTask $task, array $transactions) {
+  public function applyTransactions(ManiphestTask $task, array $transactions, array $raw_tos=[]) {
     assert_instances_of($transactions, 'ManiphestTransaction');
 
     $email_cc = $task->getCCPHIDs();
@@ -193,7 +193,7 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
       $email_cc,
       $task->getCCPHIDs());
 
-    $mail = $this->sendEmail($task, $transactions, $email_to, $email_cc);
+    $mail = $this->sendEmail($task, $transactions, $email_to, $email_cc, $raw_tos);
 
     $this->publishFeedStory(
       $task,
@@ -208,8 +208,9 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
     return PhabricatorEnv::getEnvConfig('metamta.maniphest.subject-prefix');
   }
 
-  private function sendEmail($task, $transactions, $email_to, $email_cc) {
+  private function sendEmail($task, $transactions, $email_to, $email_cc, $raw_tos=[]) {
     $email_to = array_filter(array_unique($email_to));
+
     $email_cc = array_filter(array_unique($email_cc));
 
     $phids = array();
@@ -257,9 +258,10 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
     $mailtags = $this->getMailTags($transactions);
 
     $template = id(new PhabricatorMetaMTAMail())
-      ->setSubject("T{$task_id}: {$title}")
-      ->setSubjectPrefix($this->getSubjectPrefix())
-      ->setVarySubjectPrefix("[{$action}]")
+      ->addRawTos($raw_tos)
+      ->setSubject("{$title}")
+      ->setSubjectPrefix("")
+      ->setVarySubjectPrefix("")
       ->setFrom($transaction->getAuthorPHID())
       ->setParentMessageID($this->parentMessageID)
       ->addHeader('Thread-Topic', "T{$task_id}: ".$task->getOriginalTitle())
