@@ -252,6 +252,7 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
     $body->addReplySection($reply_handler->getReplyHandlerInstructions());
 
     $thread_id = 'maniphest-task-'.$task->getPHID();
+
     $task_id = $task->getID();
     $title = $task->getTitle();
 
