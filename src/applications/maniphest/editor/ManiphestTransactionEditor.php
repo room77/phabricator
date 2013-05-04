@@ -261,7 +261,7 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
     $template = id(new PhabricatorMetaMTAMail())
       ->addRawTos($raw_tos)
       ->setSubject("{$title}")
-      ->setSubjectPrefix("")
+      ->setSubjectPrefix($this->getSubjectPrefix())
       ->setVarySubjectPrefix("")
       ->setFrom($transaction->getAuthorPHID())
       ->setParentMessageID($this->parentMessageID)
