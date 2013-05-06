@@ -65,7 +65,7 @@ final class ManiphestTaskListView extends ManiphestView {
       }
 
       $status = $task->getStatus();
-      if ($status != ManiphestTaskStatus::STATUS_OPEN) {
+      if ($status != ManiphestTaskStatus::STATUS_OPEN && $status != ManiphestTaskStatus::STATUS_OPEN_VERIFY ) {
         $item->addFootIcon(
           ($status == ManiphestTaskStatus::STATUS_CLOSED_RESOLVED)
             ? 'enable-white'

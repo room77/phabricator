@@ -436,6 +436,10 @@ final class ManiphestTransactionDetailView extends ManiphestView {
             $desc = 'created this task';
             $classes[] = 'created';
           }
+        } else if ($new == ManiphestTaskStatus::STATUS_OPEN_VERIFY) {
+          $verb = 'Fixed';
+          $desc = 'moved this task to QA';
+          $classes[] = 'spited';
         } else if ($new == ManiphestTaskStatus::STATUS_CLOSED_SPITE) {
           $verb = 'Spited';
           $desc = 'closed this task out of spite';

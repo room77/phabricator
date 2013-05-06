@@ -31,6 +31,7 @@ final class ManiphestTaskQuery extends PhabricatorQuery {
   const STATUS_INVALID      = 'status-invalid';
   const STATUS_SPITE        = 'status-spite';
   const STATUS_DUPLICATE    = 'status-duplicate';
+  const STATUS_VERIFY       = 'status-verify';
 
   private $priority         = null;
 
@@ -361,9 +362,9 @@ final class ManiphestTaskQuery extends PhabricatorQuery {
       case self::STATUS_ANY:
         return null;
       case self::STATUS_OPEN:
-        return 'status = 0';
+        return 'status = 0 or status = 6';
       case self::STATUS_CLOSED:
-        return 'status > 0';
+        return 'status > 0 and status != 6';
       default:
         $constant = idx($map, $this->status);
         if (!$constant) {

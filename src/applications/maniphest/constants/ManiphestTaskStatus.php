@@ -11,10 +11,12 @@ final class ManiphestTaskStatus extends ManiphestConstants {
   const STATUS_CLOSED_INVALID     = 3;
   const STATUS_CLOSED_DUPLICATE   = 4;
   const STATUS_CLOSED_SPITE       = 5;
+  const STATUS_OPEN_VERIFY        = 6;
 
   public static function getTaskStatusMap() {
     return array(
       self::STATUS_OPEN                 => 'Open',
+      self::STATUS_OPEN_VERIFY          => 'Needs Verification',
       self::STATUS_CLOSED_RESOLVED      => 'Resolved',
       self::STATUS_CLOSED_WONTFIX       => 'Wontfix',
       self::STATUS_CLOSED_INVALID       => 'Invalid',
@@ -26,6 +28,7 @@ final class ManiphestTaskStatus extends ManiphestConstants {
   public static function getTaskStatusFullName($status) {
     $map = array(
       self::STATUS_OPEN                 => 'Open',
+      self::STATUS_OPEN_VERIFY          => 'Open, Needs Verification',
       self::STATUS_CLOSED_RESOLVED      => 'Closed, Resolved',
       self::STATUS_CLOSED_WONTFIX       => 'Closed, Wontfix',
       self::STATUS_CLOSED_INVALID       => 'Closed, Invalid',
@@ -40,11 +43,12 @@ final class ManiphestTaskStatus extends ManiphestConstants {
 
     $map = array(
       self::STATUS_OPEN                 => PhabricatorTagView::COLOR_ORANGE,
-      self::STATUS_CLOSED_RESOLVED      => PhabricatorTagView::COLOR_BLUE,
+      self::STATUS_OPEN_VERIFY          => PhabricatorTagView::COLOR_BLUE,
+      self::STATUS_CLOSED_RESOLVED      => PhabricatorTagView::COLOR_GREEN,
       self::STATUS_CLOSED_WONTFIX       => PhabricatorTagView::COLOR_BLACK,
       self::STATUS_CLOSED_INVALID       => PhabricatorTagView::COLOR_BLACK,
       self::STATUS_CLOSED_DUPLICATE     => PhabricatorTagView::COLOR_BLACK,
-      self::STATUS_CLOSED_SPITE         => PhabricatorTagView::COLOR_INDIGO,
+      self::STATUS_CLOSED_SPITE         => PhabricatorTagView::COLOR_BLACK,
     );
     return idx($map, $status, $default);
   }
