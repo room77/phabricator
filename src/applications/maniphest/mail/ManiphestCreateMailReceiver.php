@@ -67,15 +67,19 @@ final class ManiphestCreateMailReceiver extends PhabricatorMailReceiver {
     $task->setPriority(ManiphestTaskPriority::PRIORITY_TRIAGE);
 
     $to_addresses = $mail->getToAddresses();
+
     if (in_array("bugs@room77.com", $to_addresses)) {
       $task->setOwnerPHID("PHID-USER-6xliut3v4jvoehton7wr");
       $task->setProjectPHIDs(array("PHID-PROJ-dkrujxbwzxbrqh66k5xh"));
+      $task->setCCPHIDs(array("PHID-USER-p323eqp6cnwqhuosklof"));
     }
     if (in_array("productideas@room77.com", $to_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-ekgwxmbgw42bbalx4mhr"));
+      $task->setCCPHIDs(array("PHID-USER-dlxki6xmzpc3fbngyvx4"));
     }
     if (in_array("marketingideas@room77.com", $to_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-nfxxikmojwd27e3qcaqi"));
+      $task->setCCPHIDs(array("PHID-USER-xxnynyohosao5iekrter"));
     }
 
     $editor = new ManiphestTransactionEditor();
