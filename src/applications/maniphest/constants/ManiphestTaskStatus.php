@@ -28,7 +28,7 @@ final class ManiphestTaskStatus extends ManiphestConstants {
   public static function getTaskStatusFullName($status) {
     $map = array(
       self::STATUS_OPEN                 => 'Open',
-      self::STATUS_OPEN_VERIFY          => 'Open, Needs Verification',
+      self::STATUS_OPEN_VERIFY          => 'Needs Verification',
       self::STATUS_CLOSED_RESOLVED      => 'Closed, Resolved',
       self::STATUS_CLOSED_WONTFIX       => 'Closed, Wontfix',
       self::STATUS_CLOSED_INVALID       => 'Closed, Invalid',

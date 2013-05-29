@@ -11,6 +11,13 @@ final class ManiphestCreateMailReceiver extends PhabricatorMailReceiver {
     $config_key = 'metamta.maniphest.public-create-email';
     $create_address = PhabricatorEnv::getEnvConfig($config_key);
 
+    $reply = idx($mail->headers, 'in-reply-to');
+    $is_forward = strpos($mail->getSubject(), 'Fwd:') !== false;
+    if ($reply && !$is_forward) {
+      $mail->setMessage("Reply message detected. No task created: {$reply}, ".json_encode($mail->headers))->save();
+      return false;
+    }
+
     foreach ($mail->getToAddresses() as $to_address) {
       if ($this->matchAddresses($create_address, $to_address)) {
         return true;
@@ -71,15 +78,15 @@ final class ManiphestCreateMailReceiver extends PhabricatorMailReceiver {
     if (in_array("bugs@room77.com", $to_addresses)) {
       $task->setOwnerPHID("PHID-USER-6xliut3v4jvoehton7wr");
       $task->setProjectPHIDs(array("PHID-PROJ-dkrujxbwzxbrqh66k5xh"));
-      $task->setCCPHIDs(array("PHID-USER-p323eqp6cnwqhuosklof"));
+      $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-p323eqp6cnwqhuosklof")));
     }
     if (in_array("productideas@room77.com", $to_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-ekgwxmbgw42bbalx4mhr"));
-      $task->setCCPHIDs(array("PHID-USER-dlxki6xmzpc3fbngyvx4"));
+      $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-dlxki6xmzpc3fbngyvx4")));
     }
     if (in_array("marketingideas@room77.com", $to_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-nfxxikmojwd27e3qcaqi"));
-      $task->setCCPHIDs(array("PHID-USER-xxnynyohosao5iekrter"));
+      $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-xxnynyohosao5iekrter")));
     }
 
     $editor = new ManiphestTransactionEditor();

@@ -6,6 +6,8 @@
 final class ManiphestTransactionType extends ManiphestConstants {
 
   const TYPE_NONE         = 'comment';
+  const TYPE_VERIFY       = 'verify';
+  const TYPE_REJECT       = 'reject';
   const TYPE_STATUS       = 'status';
   const TYPE_OWNER        = 'reassign';
   const TYPE_CCS          = 'ccs';
@@ -21,6 +23,7 @@ final class ManiphestTransactionType extends ManiphestConstants {
 
   public static function getTransactionTypeMap() {
     return array(
+<<<<<<< HEAD
       self::TYPE_NONE       => pht('Comment'),
       self::TYPE_STATUS     => pht('Close Task'),
       self::TYPE_OWNER      => pht('Reassign / Claim'),
@@ -28,6 +31,17 @@ final class ManiphestTransactionType extends ManiphestConstants {
       self::TYPE_PRIORITY   => pht('Change Priority'),
       self::TYPE_ATTACH     => pht('Upload File'),
       self::TYPE_PROJECTS   => pht('Associate Projects'),
+=======
+      self::TYPE_NONE       => 'Comment',
+      self::TYPE_VERIFY     => 'Assign to QA',
+      self::TYPE_REJECT     => 'Reopen for failing QA',
+      self::TYPE_STATUS     => 'Close Task',
+      self::TYPE_OWNER      => 'Reassign / Claim',
+      self::TYPE_CCS        => 'Add CCs',
+      self::TYPE_PRIORITY   => 'Change Priority',
+      self::TYPE_ATTACH     => 'Upload File',
+      self::TYPE_PROJECTS   => 'Associate Projects',
+>>>>>>> Forwarded emails now create Maniphest Tasks. Assigning to QA and reopening QA-failed tasks can be done intelligently from the comment box.
     );
   }
 

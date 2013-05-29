@@ -154,7 +154,7 @@ final class ManiphestTaskDetailController extends ManiphestController {
     $transaction_types = ManiphestTransactionType::getTransactionTypeMap();
     $resolution_types = ManiphestTaskStatus::getTaskStatusMap();
 
-    if ($task->getStatus() == ManiphestTaskStatus::STATUS_OPEN) {
+    if ($task->getStatus() == ManiphestTaskStatus::STATUS_OPEN || $task->getStatus() == ManiphestTaskStatus::STATUS_OPEN_VERIFY) {
       $resolution_types = array_select_keys(
         $resolution_types,
         array(
@@ -171,6 +171,12 @@ final class ManiphestTaskDetailController extends ManiphestController {
         'Reopen Task';
       unset($transaction_types[ManiphestTransactionType::TYPE_PRIORITY]);
       unset($transaction_types[ManiphestTransactionType::TYPE_OWNER]);
+    }
+    if ($task->getStatus() == ManiphestTaskStatus::STATUS_OPEN_VERIFY) {
+      unset($transaction_types[ManiphestTransactionType::TYPE_VERIFY]);
+    }
+    else {
+      unset($transaction_types[ManiphestTransactionType::TYPE_REJECT]);
     }
 
     $default_claim = array(
@@ -215,6 +221,23 @@ final class ManiphestTaskDetailController extends ManiphestController {
           ->setControlID('resolution')
           ->setControlStyle('display: none')
           ->setOptions($resolution_types))
+      ->appendChild(
+        id(new AphrontFormTokenizerControl())
+          ->setLabel(pht('Assign To'))
+          ->setName('assign_verify_to')
+          ->setControlID('assign_verify_to')
+          ->setControlStyle('display: none')
+          ->setID('assign-verify-tokenizer')
+          ->setDisableBehavior(true))
+      ->appendChild(
+        id(new AphrontFormTokenizerControl())
+          ->setLabel(pht('Assign To'))
+          ->setName('assign_reject_to')
+          ->setControlID('assign_reject_to')
+          ->setControlStyle('display: none')
+          ->setID('assign-reject-tokenizer')
+          ->setDisableBehavior(true))
+
       ->appendChild(
         id(new AphrontFormTokenizerControl())
           ->setLabel(pht('Assign To'))
@@ -266,6 +289,8 @@ final class ManiphestTaskDetailController extends ManiphestController {
 
     $control_map = array(
       ManiphestTransactionType::TYPE_STATUS   => 'resolution',
+      ManiphestTransactionType::TYPE_VERIFY   => 'assign_verify_to',
+      ManiphestTransactionType::TYPE_REJECT   => 'assign_reject_to',
       ManiphestTransactionType::TYPE_OWNER    => 'assign_to',
       ManiphestTransactionType::TYPE_CCS      => 'ccs',
       ManiphestTransactionType::TYPE_PRIORITY => 'priority',
@@ -279,6 +304,21 @@ final class ManiphestTaskDetailController extends ManiphestController {
         'src'         => '/typeahead/common/projects/',
         'ondemand'    => PhabricatorEnv::getEnvConfig('tokenizer.ondemand'),
         'placeholder' => pht('Type a project name...'),
+      ),
+      ManiphestTransactionType::TYPE_REJECT => array(
+        'id'          => 'assign-reject-tokenizer',
+        'src'         => '/typeahead/common/users/',
+        'limit'       => 1,
+        'ondemand'    => PhabricatorEnv::getEnvConfig('tokenizer.ondemand'),
+        'placeholder' => pht('Type a user name...'),
+      ),
+      ManiphestTransactionType::TYPE_VERIFY => array(
+        'id'          => 'assign-verify-tokenizer',
+        'src'         => '/typeahead/common/users/',
+        'value'       => array("PHID-USER-6xliut3v4jvoehton7wr" => "madeleine (madeleine)"),
+        'limit'       => 1,
+        'ondemand'    => PhabricatorEnv::getEnvConfig('tokenizer.ondemand'),
+        'placeholder' => pht('Type a user name...'),
       ),
       ManiphestTransactionType::TYPE_OWNER => array(
         'id'          => 'assign-tokenizer',

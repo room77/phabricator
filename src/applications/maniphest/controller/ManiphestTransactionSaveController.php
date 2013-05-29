@@ -99,6 +99,16 @@ final class ManiphestTransactionSaveController extends ManiphestController {
         $assign_to = reset($assign_to);
         $transaction->setNewValue($assign_to);
         break;
+      case ManiphestTransactionType::TYPE_VERIFY:
+        $assign_to = $request->getArr('assign_verify_to');
+        $assign_to = reset($assign_to);
+        $transaction->setNewValue($assign_to);
+        break;
+      case ManiphestTransactionType::TYPE_REJECT:
+        $assign_to = $request->getArr('assign_reject_to');
+        $assign_to = reset($assign_to);
+        $transaction->setNewValue($assign_to);
+        break;
       case ManiphestTransactionType::TYPE_PROJECTS:
         $projects = $request->getArr('projects');
         $projects = array_merge($projects, $task->getProjectPHIDs());

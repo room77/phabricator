@@ -40,6 +40,12 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
         case ManiphestTransactionType::TYPE_NONE:
           $old = null;
           break;
+        case ManiphestTransactionType::TYPE_VERIFY:
+          $old = null;
+          break;
+        case ManiphestTransactionType::TYPE_REJECT:
+          $old = null;
+          break;
         case ManiphestTransactionType::TYPE_STATUS:
           $old = $task->getStatus();
           break;
@@ -123,6 +129,30 @@ final class ManiphestTransactionEditor extends PhabricatorEditor {
       } else {
         switch ($type) {
           case ManiphestTransactionType::TYPE_NONE:
+            break;
+          case ManiphestTransactionType::TYPE_VERIFY:
+            $task->setStatus(ManiphestTaskStatus::STATUS_OPEN_VERIFY);
+            if ($new) {
+              $handles = id(new PhabricatorObjectHandleData(array($new)))
+                ->setViewer($this->getActor())
+                ->loadHandles();
+              $task->setOwnerOrdering($handles[$new]->getName());
+            } else {
+              $task->setOwnerOrdering(null);
+            }
+            $task->setOwnerPHID($new);
+            break;
+          case ManiphestTransactionType::TYPE_REJECT:
+            $task->setStatus(ManiphestTaskStatus::STATUS_OPEN);
+            if ($new) {
+              $handles = id(new PhabricatorObjectHandleData(array($new)))
+                ->setViewer($this->getActor())
+                ->loadHandles();
+              $task->setOwnerOrdering($handles[$new]->getName());
+            } else {
+              $task->setOwnerOrdering(null);
+            }
+            $task->setOwnerPHID($new);
             break;
           case ManiphestTransactionType::TYPE_STATUS:
             $task->setStatus($new);
