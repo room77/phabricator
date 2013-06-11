@@ -145,6 +145,7 @@ final class PhabricatorMetaMTAReceivedMail extends PhabricatorMetaMTADAO {
     if ($ok) {
       $address = $matches[1];
     }
+    $this->setMessage("Raw Email: " . $address)->save();
     return $address;
   }
 
