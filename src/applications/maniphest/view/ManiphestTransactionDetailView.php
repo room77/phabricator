@@ -316,7 +316,13 @@ final class ManiphestTransactionDetailView extends ManiphestView {
         break;
       case ManiphestTransactionType::TYPE_REJECT:
         $verb = 'Rejected';
-        $desc = 'reopened this task with ' . $this->renderHandles(array($new)) . ' for failing QA';
+        if (!$new) {
+          $target = 'nobody(?!)';
+        }
+        else {
+          $target = $this->renderHandles(array($new));
+        }
+        $desc = 'reopened this task with ' . $target . ' for failing QA';
         break;
       case ManiphestTransactionType::TYPE_TITLE:
         $verb = 'Retitled';
