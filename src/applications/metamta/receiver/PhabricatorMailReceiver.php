@@ -43,7 +43,20 @@ abstract class PhabricatorMailReceiver {
 
     $reasons = array();
 
+    // Translate nicknames into Phabricator-registered emails.
+    $nicknames = array(
+      'calvin.yang@room77.com' => 'yangc@room77.com',
+      'andrew.chen@room77.com' => 'andrew@room77.com',
+      'uygar.oztekin@room77.com' => 'oztekin@room77.com',
+      'madhavi@room77.com' => 'madhavi.jagdish@room77.com'
+    );
+
+    if (array_key_exists($from, $nicknames)) {
+      $from = $nicknames[$from];
+    }
+
     // Try to find a user with this email address.
+    $user = PhabricatorUser::loadOneWithEmailAddress($from);
     $user = PhabricatorUser::loadOneWithEmailAddress($from);
     if ($user) {
       return $user;

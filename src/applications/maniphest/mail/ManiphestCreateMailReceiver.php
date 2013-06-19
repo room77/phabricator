@@ -11,15 +11,15 @@ final class ManiphestCreateMailReceiver extends PhabricatorMailReceiver {
     $config_key = 'metamta.maniphest.public-create-email';
     $create_address = PhabricatorEnv::getEnvConfig($config_key);
 
-    $reply = idx($mail->headers, 'in-reply-to');
+    $reply = $mail->getHeader('in-reply-to');
     $is_forward = strpos($mail->getSubject(), 'Fwd:') !== false;
     if ($reply && !$is_forward) {
-      $mail->setMessage("Reply message detected. No task created: {$reply}, ".json_encode($mail->headers))->save();
       return false;
     }
 
-    foreach ($mail->getToAddresses() as $to_address) {
-      if ($this->matchAddresses($create_address, $to_address)) {
+    $valid_addresses = array_merge($mail->getToAndCCAddresses(), $mail->getDeliveredToAddresses());
+    foreach ($valid_addresses as $valid_address) {
+      if ($this->matchAddresses($create_address, $valid_address)) {
         return true;
       }
     }
@@ -73,18 +73,18 @@ final class ManiphestCreateMailReceiver extends PhabricatorMailReceiver {
     $task->setOriginalEmailSource($mail->getHeader('From'));
     $task->setPriority(ManiphestTaskPriority::PRIORITY_TRIAGE);
 
-    $to_addresses = $mail->getToAddresses();
+    $to_and_cc_addresses = $mail->getToAndCCAddresses();
 
-    if (in_array("bugs@room77.com", $to_addresses)) {
+    if (in_array("bugs@room77.com", $to_and_cc_addresses)) {
       $task->setOwnerPHID("PHID-USER-6xliut3v4jvoehton7wr");
       $task->setProjectPHIDs(array("PHID-PROJ-dkrujxbwzxbrqh66k5xh"));
       $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-p323eqp6cnwqhuosklof")));
     }
-    if (in_array("productideas@room77.com", $to_addresses)) {
+    if (in_array("productideas@room77.com", $to_and_cc_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-ekgwxmbgw42bbalx4mhr"));
       $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-dlxki6xmzpc3fbngyvx4")));
     }
-    if (in_array("marketingideas@room77.com", $to_addresses)) {
+    if (in_array("marketingideas@room77.com", $to_and_cc_addresses)) {
       $task->setProjectPHIDs(array("PHID-PROJ-nfxxikmojwd27e3qcaqi"));
       $task->setCCPHIDs(array_merge($task->getCCPHIDs(), array("PHID-USER-xxnynyohosao5iekrter")));
     }

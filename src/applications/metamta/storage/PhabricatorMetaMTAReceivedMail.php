@@ -53,6 +53,10 @@ final class PhabricatorMetaMTAReceivedMail extends PhabricatorMetaMTADAO {
     return $this->getHeader('Subject');
   }
 
+  public function getToAndCCAddresses() {
+    return array_merge($this->getToAddresses(), $this->getCCAddresses());
+  }
+
   public function getCCAddresses() {
     return $this->getRawEmailAddresses(idx($this->headers, 'cc'));
   }
@@ -244,7 +248,7 @@ final class PhabricatorMetaMTAReceivedMail extends PhabricatorMetaMTADAO {
       $names = implode(', ', array_keys($accept));
       throw new PhabricatorMetaMTAReceivedMailProcessingException(
         MetaMTAReceivedMailStatus::STATUS_ABUNDANT_RECEIVERS,
-        "More than one `PhabricatorMailReceiver` claims to accept this mail.");
+        "More than one `PhabricatorMailReceiver` claims to accept this mail: " . $names);
     }
 
     return head($accept);
