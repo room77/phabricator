@@ -83,25 +83,25 @@ foreach ($input as $key => $line) {
     $line_number = $matches['line'];
     $path        = $matches['path'];
 
-    if (strlen($context) > 128) {
+    if (strlen($context) > 256) {
       throw new Exception(
         "Symbol context '{$context}' defined on line #{$line_no} is too long, ".
         "maximum symbol context length is 128 characters.");
     }
 
-    if (strlen($name) > 128) {
+    if (strlen($name) > 256) {
       throw new Exception(
         "Symbol name '{$name}' defined on line #{$line_no} is too long, ".
         "maximum symbol name length is 128 characters.");
     }
 
-    if (strlen($type) > 12) {
+    if (strlen($type) > 32) {
       throw new Exception(
         "Symbol type '{$type}' defined on line #{$line_no} is too long, ".
         "maximum symbol type length is 12 characters.");
     }
 
-    if (strlen($lang) > 32) {
+    if (strlen($lang) > 64) {
       throw new Exception(
         "Symbol language '{$lang}' defined on line #{$line_no} is too long, ".
         "maximum symbol language length is 32 characters.");
