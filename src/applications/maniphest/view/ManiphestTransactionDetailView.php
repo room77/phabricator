@@ -468,7 +468,7 @@ final class ManiphestTransactionDetailView extends ManiphestView {
         } else if ($new == ManiphestTaskStatus::STATUS_OPEN_VERIFY) {
           $verb = 'Fixed';
           $desc = 'moved this task to QA';
-          $classes[] = 'fixed';
+          $classes[] = 'qa';
         } else if ($new == ManiphestTaskStatus::STATUS_CLOSED_RESOLVED) {
           $verb = 'Closed';
           $desc = 'has closed this task as "Resolved"';
