@@ -167,6 +167,10 @@ final class ManiphestTransactionSaveController extends ManiphestController {
         // Otherwise, when a task is reassigned, move the previous owner to CC.
         $added_ccs[] = $task->getOwnerPHID();
         break;
+      case ManiphestTransactionType::TYPE_VERIFY:
+        // When a task is moved to QA, move the previous owner to CC.
+        $added_ccs[] = $task->getOwnerPHID();
+        break;
       case ManiphestTransactionType::TYPE_STATUS:
         if (!$task->getOwnerPHID() &&
             $request->getStr('resolution') !=

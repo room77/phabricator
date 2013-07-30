@@ -312,7 +312,14 @@ final class ManiphestTransactionDetailView extends ManiphestView {
     switch ($type) {
       case ManiphestTransactionType::TYPE_VERIFY:
         $verb = 'Fixed';
-        $desc = 'moved this task to QA';
+        if (!$new) {
+          $target = 'nobody(?!)';
+        }
+        else {
+          $target = $this->renderHandles(array($new));
+        }
+        $desc = 'assigned this task to ' . $target . ' for QA';
+        $classes[] = 'qa';
         break;
       case ManiphestTransactionType::TYPE_REJECT:
         $verb = 'Rejected';
@@ -323,6 +330,7 @@ final class ManiphestTransactionDetailView extends ManiphestView {
           $target = $this->renderHandles(array($new));
         }
         $desc = 'reopened this task with ' . $target . ' for failing QA';
+        $classes[] = 'qafail';
         break;
       case ManiphestTransactionType::TYPE_TITLE:
         $verb = 'Retitled';
@@ -445,7 +453,7 @@ final class ManiphestTransactionDetailView extends ManiphestView {
             if ($old == ManiphestTaskStatus::STATUS_OPEN_VERIFY) {
               $verb = 'Rejected';
               $desc = 'reopened this task for failing QA';
-              $classes[] = 'reopened';
+              $classes[] = 'qafail';
             }
             else {
               $verb = 'Reopened';
@@ -461,6 +469,10 @@ final class ManiphestTransactionDetailView extends ManiphestView {
           $verb = 'Fixed';
           $desc = 'moved this task to QA';
           $classes[] = 'fixed';
+        } else if ($new == ManiphestTaskStatus::STATUS_CLOSED_RESOLVED) {
+          $verb = 'Closed';
+          $desc = 'has closed this task as "Resolved"';
+          $classes[] = 'resolved';
         } else if ($new == ManiphestTaskStatus::STATUS_CLOSED_SPITE) {
           $verb = 'Spited';
           $desc = 'closed this task out of spite';

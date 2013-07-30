@@ -9,6 +9,16 @@ final class ConpherenceCreateThreadMailReceiver
   }
 
   public function canAcceptMail(PhabricatorMetaMTAReceivedMail $mail) {
+    $config_key = 'metamta.maniphest.public-create-email';
+    $create_address = PhabricatorEnv::getEnvConfig($config_key);
+
+    $valid_addresses = array_merge($mail->getToAndCCAddresses(), $mail->getDeliveredToAddresses());
+    foreach ($valid_addresses as $valid_address) {
+      if ($this->matchAddresses($create_address, $valid_address)) {
+        return false;
+      }
+    }
+
     $usernames = $this->getMailUsernames($mail);
     if (!$usernames) {
       return false;

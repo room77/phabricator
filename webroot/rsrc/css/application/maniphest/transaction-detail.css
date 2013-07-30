@@ -35,8 +35,20 @@
   border-color: #660099;
 }
 
+.phabricator-transaction-view .qa {
+  border-color: #2980b9;
+}
+
+.phabricator-transaction-view .qafail {
+  border-color: #a30000;
+}
+
+.phabricator-transaction-view .resolved {
+  border-color: #27ae60;
+}
+
 .phabricator-transaction-view .closed {
-  border-color: #006699;
+  border-color: #333333;
 }
 
 .phabricator-transaction-view .spited {
