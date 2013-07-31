@@ -124,7 +124,7 @@ final class PhabricatorMetaMTAReceivedMail extends PhabricatorMetaMTADAO {
       throw $ex;
     }
 
-    return $this->setMessage('OK')->save();
+    return $this->setMessage('OK: ' . $this->getCleanTextBody())->save();
   }
 
   public function getCleanTextBody() {
