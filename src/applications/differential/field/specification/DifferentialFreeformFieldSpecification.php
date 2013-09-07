@@ -29,8 +29,11 @@ abstract class DifferentialFreeformFieldSpecification
       'closes'        => ManiphestTaskStatus::STATUS_CLOSED_RESOLVED,
       'closed'        => ManiphestTaskStatus::STATUS_CLOSED_RESOLVED,
       'ref'           => null,
+      'ref:'          => null,
       'refs'          => null,
+      'refs:'         => null,
       'references'    => null,
+      'references:'   => null,
       'cf.'           => null,
     );
 
