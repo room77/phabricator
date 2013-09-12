@@ -254,7 +254,7 @@ final class DifferentialRevisionViewController extends DifferentialController {
 
     $whitespace = $request->getStr(
       'whitespace',
-      DifferentialChangesetParser::WHITESPACE_IGNORE_ALL);
+      DifferentialChangesetParser::WHITESPACE_SHOW_ALL);
 
     if ($arc_project) {
       list($symbol_indexes, $project_phids) = $this->buildSymbolIndexes(
