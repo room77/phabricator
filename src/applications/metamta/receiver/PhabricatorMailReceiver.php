@@ -47,8 +47,7 @@ abstract class PhabricatorMailReceiver {
     $nicknames = array(
       'calvin.yang@room77.com' => 'yangc@room77.com',
       'andrew.chen@room77.com' => 'andrew@room77.com',
-      'uygar.oztekin@room77.com' => 'oztekin@room77.com',
-      'madhavi@room77.com' => 'madhavi.jagdish@room77.com'
+      'uygar.oztekin@room77.com' => 'oztekin@room77.com'
     );
 
     if (array_key_exists($from, $nicknames)) {
